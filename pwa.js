@@ -11,7 +11,7 @@ function bytes(s){return Uint8Array.from(atob(s.replace(/-/g,'+').replace(/_/g,'
 function send(type,data={}){appWindow?.postMessage({source:'comedor-pwa',nonce,type,...data},'*');}
 function supported(){if(!('Notification' in window)||!('PushManager' in window)||!('serviceWorker' in navigator))throw Error('Este navegador no admite avisos de la app.');const ios=/iPad|iPhone|iPod/.test(navigator.userAgent)||(navigator.platform==='MacIntel'&&navigator.maxTouchPoints>1);if(ios&&!matchMedia('(display-mode: standalone)').matches&&!navigator.standalone)throw Error('En iPhone/iPad, añade primero esta app a la pantalla de inicio y ábrela desde su icono.');}
 window.addEventListener('message',async event=>{
- const m=event.data;if(!m||m.source!=='comedor-app'||m.nonce!==nonce||!/^https:\/\/([a-z0-9-]+\.)?script\.googleusercontent\.com$/.test(event.origin))return;
+ const m=event.data;if(!m||m.source!=='comedor-app'||m.nonce!==nonce||!/^https:\/\/(?:script|[a-z0-9-]+-script)\.googleusercontent\.com$/.test(event.origin))return;
  if(m.type==='ready'){appWindow=event.source;document.querySelector('#loading').hidden=true;document.querySelector('#loading').style.display='none';return;}
  if(event.source!==appWindow)return;
  if(m.type==='status'){try{supported();const r=await ready,sub=await r.pushManager.getSubscription();send('status-result',{active:!!sub,permission:Notification.permission});}catch(e){send('status-result',{active:false,message:e.message});}return;}
