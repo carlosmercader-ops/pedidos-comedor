@@ -1,10 +1,13 @@
 // La interfaz y los datos siguen viviendo exclusivamente en Apps Script.
 const SCRIPT_URL='https://script.google.com/a/macros/svpaulcar.es/s/AKfycbxm6lOf_bWTRGf_hx16lc2xtFu69KvtJKW3vJsIsKtwiASIogrtKHvqt0tYsakjg-mI/exec';
 const nonce=crypto.randomUUID(),frame=document.querySelector('#app'),dialog=document.querySelector('#pushDialog'),confirm=document.querySelector('#pushConfirm'),error=document.querySelector('#pushError');
-let appWindow=null,pending=null,registration=null,busy=false;
+let appWindow=null,pending=null,registration=null,busy=false,loginOpened=false;
 const start=new URLSearchParams(location.search).get('view')==='comedor'?'comedor':'';
 const url=new URL(SCRIPT_URL);url.searchParams.set('pwaNonce',nonce);if(start)url.searchParams.set('start',start);frame.src=url.href;document.querySelector('#original').href=SCRIPT_URL;
-setTimeout(()=>document.querySelector('#fallback').hidden=false,12000);
+setTimeout(()=>{if(!appWindow){document.querySelector('#fallback').hidden=false;document.querySelector('#retry').hidden=false;}},12000);
+document.querySelector('#retry').onclick=()=>{frame.src=url.href;};
+document.querySelector('#original').addEventListener('click',()=>{loginOpened=true;});
+window.addEventListener('focus',()=>{if(loginOpened&&!appWindow){loginOpened=false;frame.src=url.href;}});
 const ready= 'serviceWorker' in navigator?navigator.serviceWorker.register('./sw.js',{scope:'./'}).then(r=>{registration=r;return navigator.serviceWorker.ready;}):Promise.reject(Error('Este navegador no admite notificaciones.'));
 ready.catch(()=>{});
 function bytes(s){return Uint8Array.from(atob(s.replace(/-/g,'+').replace(/_/g,'/').padEnd(Math.ceil(s.length/4)*4,'=')),c=>c.charCodeAt(0));}

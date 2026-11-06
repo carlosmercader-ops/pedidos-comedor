@@ -1,4 +1,4 @@
-const CACHE='comedor-shell-v2';const ASSETS=['./','./index.html','./pwa.js','./manifest.webmanifest','./icon.svg','./icon-192.png','./icon-512.png','./apple-touch-icon.png'];
+const CACHE='comedor-shell-v3';const ASSETS=['./','./index.html','./pwa.js','./manifest.webmanifest','./icon.svg','./icon-192.png','./icon-512.png','./apple-touch-icon.png'];
 self.addEventListener('install',event=>{event.waitUntil(caches.open(CACHE).then(cache=>cache.addAll(ASSETS)));self.skipWaiting();});
 self.addEventListener('activate',event=>event.waitUntil(caches.keys().then(keys=>Promise.all(keys.filter(k=>k.startsWith('comedor-shell-')&&k!==CACHE).map(k=>caches.delete(k)))).then(()=>self.clients.claim())));
 // Nunca se guardan las páginas de Script, pedidos, alumnos, claves ni sesiones.
