@@ -18,7 +18,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - name: Publicar servicio de avisos
-        run: npx --yes wrangler@4 deploy worker-push.js --name svpaulcar-comedor-push --compatibility-date 2026-11-06
+        run: npx --yes wrangler@4 deploy worker-push.js --name svpaulcar-comedor-push --compatibility-date 2026-11-06 --keep-vars
         env:
           CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           CLOUDFLARE_ACCOUNT_ID: cdd91f774a9320d0e412fb88ae107850
