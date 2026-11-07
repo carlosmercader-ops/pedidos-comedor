@@ -4,7 +4,8 @@ const nonce=crypto.randomUUID(),frame=document.querySelector('#app'),dialog=docu
 let appOrigin=null,appWindow=null,pending=null,registration=null,busy=false,loginOpened=false;
 const start=new URLSearchParams(location.search).get('view')==='comedor'?'comedor':'';
 const url=new URL(SCRIPT_URL);url.searchParams.set('pwaNonce',nonce);if(start)url.searchParams.set('start',start);frame.src=url.href;document.querySelector('#original').href=SCRIPT_URL;
-setTimeout(()=>{if(!appWindow){document.querySelector('#fallback').hidden=false;document.querySelector('#retry').hidden=false;}},12000);
+// If Google cannot finish inside the installed window, continue with its normal sign-in in the same tab.
+setTimeout(()=>{if(!appWindow){const direct=new URL(SCRIPT_URL);if(start)direct.searchParams.set('start',start);location.replace(direct.href);}},12000);
 document.querySelector('#retry').onclick=()=>{frame.src=url.href;};
 document.querySelector('#original').addEventListener('click',()=>{loginOpened=true;});
 window.addEventListener('focus',()=>{if(loginOpened&&!appWindow){loginOpened=false;frame.src=url.href;}});
